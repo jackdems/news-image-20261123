@@ -218,7 +218,7 @@ def card(x, y, w, ih, n, region, kicker, head, body, kind, lab, src, chip=None, 
     d.text((x + 7.5 - tw(str(n), f) / 2, yy + 3), str(n), font=f, fill="white")
     spaced(x + 20, yy + 3, kicker, SANS_B(8), c, 0.7)
     yy = text_block(x, yy + 19, head, SERIF_B(hf), w, INK, int(hf * 1.12))
-    text_block(x, yy + 2, body, SANS(10 if lead else 9), w, (55, 55, 55), 12 if lead else 11)
+    text_block(x, yy + 2, body, SANS(11), w, (55, 55, 55), 13)
 
 leads = [
     (1, "Americas", "SANTA CLARA, US · BUSINESS", "Nvidia reinstates Jensen Huang as chief executive",
@@ -234,7 +234,7 @@ leads = [
 gx = M; gw = (W - 2 * M - 2 * 14) / 3; y = 202
 for i, L in enumerate(leads):
     n, rg, k, hd, bd, kind, lab, chip, src = L
-    card(M + i * (gw + 14), y, gw, 118, n, rg, k, hd, bd, kind, lab, src, chip, 18, True)
+    card(M + i * (gw + 14), y, gw, 118, n, rg, k, hd, bd, kind, lab, src, chip, 20, True)
 
 sec = [
     (4, "Europe", "DYMER · WAR", "Russian strikes kill 15 around Kyiv", "Flats collapse in Dymer; day of mourning.", "flag_ua", "KYIV REGION: 15", "Officials · AFP"),
@@ -248,17 +248,18 @@ sec = [
     (12, "Africa", "WARRAP, S. SUDAN · CONFLICT", "Attack kills 24 civilians", "Officials blame SPLA-IO fighters.", "sudan", "S. SUDAN: 24", "Officials · AFP"),
     (13, "Middle East", "MANAMA · WAR", "Bahrain: 2 hurt in Iranian strike", "Gulf states condemn hit on Sitra site.", "fire", "BAHRAIN: STRIKE", "Ministry · AFP"),
 ]
+sec = sec[:5]
 cw = (W - 2 * M - 4 * 12) / 5
-y = 432
+y = 452
 for i, S in enumerate(sec):
     r_, c_ = divmod(i, 5)
     n, rg, k, hd, bd, kind, lab, src = S
-    card(M + c_ * (cw + 12), y + r_ * 182, cw, 84, n, rg, k, hd, bd, kind, lab, src, None, 13)
+    card(M + c_ * (cw + 12), y, cw, 120, n, rg, k, hd, bd, kind, lab, src, None, 16)
 
 # ---- bottom: map + briefs
-by = 808; d.line([M, by - 4, W - M, by - 4], fill=INK, width=1)
+by = 684; d.line([M, by - 4, W - M, by - 4], fill=INK, width=1)
 spaced(M, by, "WHERE IT HAPPENED", SANS_B(9), INK, 1)
-mx0, my0, mx1, my1 = M, by + 14, M + 290, by + 140
+mx0, my0, mx1, my1 = M, by + 14, M + 290, by + 236
 d.rectangle([mx0, my0, mx1, my1], fill=(28, 48, 84))
 def P(lon, lat): return (mx0 + (lon + 180) / 360 * (mx1 - mx0), my0 + (80 - lat) / 140 * (my1 - my0))
 LAND = (214, 196, 160)
@@ -277,23 +278,28 @@ pins = [(1, -122, 37, "Americas"), (2, 20, 32, "Africa"), (3, -59.6, 13, "Americ
         (6, -77, 38.9, "Americas"), (7, 30.7, 36.9, "Middle East"), (8, 30, 1.5, "Africa"), (9, 90.4, 23.8, "Asia"), (10, -84.4, 33.7, "Americas"),
         (11, -74, 40.7, "Americas"), (12, 28.5, 8.2, "Africa"), (13, 50.6, 26.2, "Middle East")]
 OFF = {6: (16, 8), 10: (-12, 10), 11: (14, -10), 1: (-4, 0), 3: (8, 6), 8: (9, 6), 12: (-14, 2),
-       2: (-12, -8), 7: (2, 9), 4: (-9, -8), 5: (9, -8), 13: (12, 4), 9: (0, 0)}
-for n, lo, la, rg in pins:
+       2: (-16, -4), 7: (14, 10), 4: (-12, -10), 5: (12, -6), 13: (12, 4), 9: (0, 0)}
+for n, lo, la, rg in [p_ for p_ in pins if p_[0] <= 8]:
     tx, ty = P(lo, la); ox, oy = OFF.get(n, (0, 0))
     px, py = min(max(tx + ox, mx0 + 8), mx1 - 8), min(max(ty + oy, my0 + 8), my1 - 8)
     if (ox, oy) != (0, 0):
         d.line([tx, ty, px, py], fill="white", width=1); d.ellipse([tx - 2, ty - 2, tx + 2, ty + 2], fill="white")
-for n, lo, la, rg in pins:
+for n, lo, la, rg in [p_ for p_ in pins if p_[0] <= 8]:
     tx, ty = P(lo, la); ox, oy = OFF.get(n, (0, 0))
     px, py = min(max(tx + ox, mx0 + 8), mx1 - 8), min(max(ty + oy, my0 + 8), my1 - 8)
     d.ellipse([px - 9, py - 9, px + 9, py + 9], fill=REG[rg], outline="white")
     f = SANS_B(12 if n < 10 else 10); s = str(n)
     bb = d.textbbox((0, 0), s, font=f); d.text((px - (bb[0] + bb[2]) / 2, py - (bb[1] + bb[3]) / 2), s, font=f, fill="white")
-d.text((M, my1 + 3), "Pins show stories 1-13; white lines mark exact spots.", font=SANS(8), fill=GREY)
+d.text((M, my1 + 3), "Pins show stories 1-8; white lines mark exact spots.", font=SANS(8), fill=GREY)
 
 bx = M + 306
-spaced(bx, by, "ALSO ON MONDAY 23 NOVEMBER 2026 — 20 MORE STORIES", SANS_B(9), INK, 1)
+spaced(bx, by, "ALSO ON MONDAY 23 NOVEMBER 2026 — 25 MORE STORIES", SANS_B(9), INK, 1)
 briefs = [
+    (9, "Asia", "Dhaka", "Court orders social media curbs for under-16s", "PTI"),
+    (10, "Americas", "Atlanta", "Delta fixed after glitch delayed 1,000+ flights", "AP"),
+    (11, "Americas", "New York", "Tech leads Wall Street rebound", "AP"),
+    (12, "Africa", "Warrap", "Attack kills 24 civilians in South Sudan", "AFP"),
+    (13, "Middle East", "Manama", "Bahrain: 2 hurt in Iranian strike", "AFP"),
     (14, "Middle East", "Benghazi", "UN mission urges probe into port attacks", "UN"),
     (15, "Europe", "Kyiv", "Drone debris sets fire in city centre; 5 hurt", "Kyiv Indep."),
     (16, "Europe", "Warsaw", "Poland: Russia twice plotted to kill rapper", "AP"),
@@ -317,7 +323,7 @@ briefs = [
 ]
 colw = (W - M - bx - 12) / 2
 for i, (n, rg, pl, s, src) in enumerate(briefs):
-    c_, r_ = divmod(i, 10); xx = bx + c_ * (colw + 12); yy = by + 15 + r_ * 14.2
+    c_, r_ = divmod(i, 13); xx = bx + c_ * (colw + 12); yy = by + 18 + r_ * 18.5
     d.text((xx, yy), str(n), font=SANS_B(11), fill=REG[rg]); xx2 = xx + 18
     d.text((xx2, yy), pl, font=SANS_B(11), fill=INK); xx2 += tw(pl, SANS_B(11)) + 4
     d.text((xx2, yy), s, font=SANS(11), fill=INK); xx2 += tw(s, SANS(11)) + 3
