@@ -45,18 +45,18 @@ df = SERIF_I(13); d.text(((W - tw(deck, df)) / 2, 104), deck, font=df, fill=INK)
 d.line([M, 124, W - M, 124], fill=INK, width=1)
 
 # ---- stats strip
-stats = [("11", "days from Huang quitting Nvidia to his reinstatement"),
-         ("7", "Ukrainian sea drones sent against the corvette Merkury"),
-         ("15", "killed by Russian strikes in Kyiv region, officials say"),
-         ("258", "House seats now won by Democrats, most since 1992"),
-         ("24", "civilians killed in South Sudan attack, officials say"),
-         ("1,000+", "Delta flights delayed by a weight-system glitch")]
+stats = [("11", "days: Huang out, then back"),
+         ("7", "sea drones hit warship"),
+         ("15", "killed near Kyiv"),
+         ("258", "Democrat House seats"),
+         ("24", "killed in South Sudan"),
+         ("1,000+", "Delta flights delayed")]
 sw = (W - 2 * M) / 6
 for i, (n, c) in enumerate(stats):
     x = M + i * sw
     d.rectangle([x, 131, x + 3, 167], fill=RED)
     d.text((x + 9, 128), n, font=SERIF_B(21), fill=INK)
-    text_block(x + 9, 153, c, SANS(8), sw - 16, GREY, 9)
+    text_block(x + 9, 152, c, SANS_B(11), sw - 14, INK, 12)
 
 # ---- region bar
 counts = [("Europe", 5), ("Middle East", 5), ("Africa", 5), ("Americas", 12), ("Asia", 5), ("Global", 1)]
@@ -276,8 +276,8 @@ for _ft in _gj["features"]:
 pins = [(1, -122, 37, "Americas"), (2, 20, 32, "Africa"), (3, -59.6, 13, "Americas"), (4, 30.5, 50.8, "Europe"), (5, 44.5, 40.2, "Europe"),
         (6, -77, 38.9, "Americas"), (7, 30.7, 36.9, "Middle East"), (8, 30, 1.5, "Africa"), (9, 90.4, 23.8, "Asia"), (10, -84.4, 33.7, "Americas"),
         (11, -74, 40.7, "Americas"), (12, 28.5, 8.2, "Africa"), (13, 50.6, 26.2, "Middle East")]
-OFF = {6: (16, 8), 10: (-12, 10), 11: (14, -10), 1: (-4, 0), 3: (8, 6), 8: (9, 6), 12: (-12, -3),
-       2: (-9, 3), 7: (2, 9), 4: (-9, -8), 5: (9, -8), 13: (12, 4), 9: (0, 0)}
+OFF = {6: (16, 8), 10: (-12, 10), 11: (14, -10), 1: (-4, 0), 3: (8, 6), 8: (9, 6), 12: (-14, 2),
+       2: (-12, -8), 7: (2, 9), 4: (-9, -8), 5: (9, -8), 13: (12, 4), 9: (0, 0)}
 for n, lo, la, rg in pins:
     tx, ty = P(lo, la); ox, oy = OFF.get(n, (0, 0))
     px, py = min(max(tx + ox, mx0 + 8), mx1 - 8), min(max(ty + oy, my0 + 8), my1 - 8)
@@ -286,8 +286,8 @@ for n, lo, la, rg in pins:
 for n, lo, la, rg in pins:
     tx, ty = P(lo, la); ox, oy = OFF.get(n, (0, 0))
     px, py = min(max(tx + ox, mx0 + 8), mx1 - 8), min(max(ty + oy, my0 + 8), my1 - 8)
-    d.ellipse([px - 7, py - 7, px + 7, py + 7], fill=REG[rg], outline="white")
-    f = SANS_B(9 if n < 10 else 8); s = str(n)
+    d.ellipse([px - 9, py - 9, px + 9, py + 9], fill=REG[rg], outline="white")
+    f = SANS_B(12 if n < 10 else 10); s = str(n)
     bb = d.textbbox((0, 0), s, font=f); d.text((px - (bb[0] + bb[2]) / 2, py - (bb[1] + bb[3]) / 2), s, font=f, fill="white")
 d.text((M, my1 + 3), "Pins show stories 1-13; white lines mark exact spots.", font=SANS(8), fill=GREY)
 
@@ -317,10 +317,10 @@ briefs = [
 ]
 colw = (W - M - bx - 12) / 2
 for i, (n, rg, pl, s, src) in enumerate(briefs):
-    c_, r_ = divmod(i, 10); xx = bx + c_ * (colw + 12); yy = by + 15 + r_ * 13.4
-    d.text((xx, yy), str(n), font=SANS_B(9), fill=REG[rg]); xx2 = xx + 16
-    d.text((xx2, yy), pl, font=SANS_B(9), fill=INK); xx2 += tw(pl, SANS_B(9)) + 4
-    d.text((xx2, yy), s, font=SANS(9), fill=INK); xx2 += tw(s, SANS(9)) + 3
+    c_, r_ = divmod(i, 10); xx = bx + c_ * (colw + 12); yy = by + 15 + r_ * 14.2
+    d.text((xx, yy), str(n), font=SANS_B(11), fill=REG[rg]); xx2 = xx + 18
+    d.text((xx2, yy), pl, font=SANS_B(11), fill=INK); xx2 += tw(pl, SANS_B(11)) + 4
+    d.text((xx2, yy), s, font=SANS(11), fill=INK); xx2 += tw(s, SANS(11)) + 3
     if xx2 + tw(f"({src})", SANS(8)) < xx + colw: d.text((xx2, yy + 1), f"({src})", font=SANS(8), fill=GREY)
 
 # ---- date check + footer
